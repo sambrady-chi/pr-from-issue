@@ -40,8 +40,13 @@ const pr = async (jiraUrl) => {
     if (!onClean) return;
 
     await pullDefault();
-    await checkoutNewBranch(branchName);
+    await checkoutNewBranch(branchName, key);
     const pullRequestUrl = await createPr(key, summary, jiraUrl, branchName);
+    console.log(`Successfully created your Pull Request for issue ${jiraKey}.`);
+    console.log("Find your new PR here:");
+    console.log("-----------------------------------------");
+    console.log(pullRequestUrl);
+    console.log("-----------------------------------------");
   } catch (e) {
     console.log("something went wrong", e);
   }

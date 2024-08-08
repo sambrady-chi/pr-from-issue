@@ -22,6 +22,7 @@ function isEmpty(obj) {
 }
 
 const pullDefault = async () => {
+  console.log("Pulling Latest...");
   await exec("git pull");
 };
 
@@ -52,9 +53,12 @@ const onCleanBranch = async () => {
   }
 };
 
-const checkoutNewBranch = async (branchName) => {
+const checkoutNewBranch = async (branchName, key) => {
+  console.log(`creating new branch: ${branchName} with Initial Commit...`);
   await exec(`git checkout -b ${branchName}`); // checkout to new local branch
-  await exec(`git commit -m "Initial Commit" --allow-empty`); // make a commit so there is a branch
+  await exec(
+    `git commit -m "Create Branch and PR for Jira Issue: ${key}" --allow-empty`
+  ); // make a commit so the PR can be created
   await exec(`git push --set-upstream origin ${branchName}`); // push this branch to remote
 };
 
@@ -62,7 +66,6 @@ const createPr = async (key, summary, url, branch) => {
   const title = `${key} ${summary}`;
   const body = url;
   console.log(`Creating Pull Request: ${title}`);
-  console.log(`for branch: ${branch}`);
   const { stdout } = await exec(
     `gh pr create --title "${title}" --body "${body}" --assignee @me --head ${branch} `
   );
