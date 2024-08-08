@@ -1,0 +1,25 @@
+{
+  "name": "pr-from-issue",
+  "version": "1.0.0",
+  "description": "Lightweight Command Line tool to create a Git Branch and Pull Request from a given JIRA Issue",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sambrady-chi/pr-from-issue.git"
+  },
+  "keywords": [
+    "Jira",
+    "Pull",
+    "Request",
+    "PR"
+  ],
+  "author": "Sam Brady",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sambrady-chi/pr-from-issue/issues"
+  },
+  "homepage": "https://github.com/sambrady-chi/pr-from-issue#readme"
+}
