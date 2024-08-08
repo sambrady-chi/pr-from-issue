@@ -9,28 +9,25 @@ const {
   fetchIssueDetailsFromJira,
 } = require("../utils/http");
 
-const pr = (jiraUrl) => {
+const pr = async (jiraUrl) => {
   if (!isValidUrl(jiraUrl)) {
     console.log("Invalid Jira URL");
     return;
   }
   const environmentVariables = getEnvVariables(); // get auth information from .zshrc or bash profile
   if (!environmentVariables) return;
-  const key = getJiraIssueKeyFromUrl(jiraUrl);
-
-  fetchIssueDetailsFromJira({
+  const data = await fetchIssueDetailsFromJira({
     ...environmentVariables,
-    key,
-  }).then((data) => {
-    const {
-      fields: { summary },
-      key,
-    } = data;
-
-    const branchName = branchify(key, summary);
-    console.log(branchName);
-    console.log(branchName.length);
+    key: getJiraIssueKeyFromUrl(jiraUrl),
   });
+  const {
+    fields: { summary },
+    key,
+  } = data;
+
+  const branchName = branchify(key, summary);
+  console.log(branchName);
+  console.log(branchName.length);
 };
 
 module.exports = pr;
