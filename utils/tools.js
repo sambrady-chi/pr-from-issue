@@ -1,3 +1,6 @@
+const util = require("util");
+const exec = util.promisify(require("child_process").exec);
+
 const branchify = (key, summary) => {
   const lowerKey = String(key).toLowerCase().split(" ").join("-");
   const lowerSummary = String(summary).toLowerCase().split(" ").join("-");
@@ -8,4 +11,70 @@ const branchify = (key, summary) => {
     .trim(); // remove whitespace
 };
 
-module.exports = { branchify };
+function isEmpty(obj) {
+  for (const prop in obj) {
+    if (obj.hasOwnProperty(prop)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+const pullDefault = async () => {
+  await exec("git pull");
+};
+
+const getDefaultBranch = async () => {
+  await exec(
+    "git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'"
+  );
+};
+
+const getCurrentBranch = async () => {
+  await exec("git rev-parse --abbrev-ref HEAD");
+};
+
+const onCleanBranch = async () => {
+  const currentBranch = await getCurrentBranch();
+  const defaultBranch = await getDefaultBranch();
+
+  if (currentBranch === defaultBranch) {
+    return true;
+  } else {
+    console.log(
+      "You must be on 'main' or 'master' branch and have no outstanding changes to begin."
+    );
+    console.log(
+      "git checkout main/master and ensure working tree is clean before retrying."
+    );
+    return false;
+  }
+};
+
+const checkoutNewBranch = async (branchName) => {
+  await exec(`git checkout -b ${branchName}`); // checkout to new local branch
+  await exec(`git commit -m "Initial Commit" --allow-empty`); // make a commit so there is a branch
+  await exec(`git push --set-upstream origin ${branchName}`); // push this branch to remote
+};
+
+const createPr = async (key, summary, url, branch) => {
+  const title = `${key} ${summary}`;
+  const body = url;
+  console.log(`Creating Pull Request: ${title}`);
+  console.log(`for branch: ${branch}`);
+  const { stdout } = await exec(
+    `gh pr create --title "${title}" --body "${body}" --assignee @me --head ${branch} `
+  );
+
+  return stdout;
+};
+
+module.exports = {
+  branchify,
+  onCleanBranch,
+  isEmpty,
+  checkoutNewBranch,
+  createPr,
+  pullDefault,
+};

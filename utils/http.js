@@ -1,24 +1,19 @@
 const https = require("https");
 
-const isValidUrl = (url) => {
-  try {
-    new URL(url);
-    return true;
-  } catch (error) {
-    return false;
-  }
-};
-
 // Parses JIRA URL, searching for selectedIssue parameters or defaulting to key in JIRA URL.
 // JIRA API will raise error if key is invalid.
 const getJiraIssueKeyFromUrl = (url) => {
-  const urlObj = new URL(url);
-  const { pathname, searchParams } = urlObj;
-  if (searchParams.has("selectedIssue"))
-    return searchParams.get("selectedIssue");
+  try {
+    const urlObj = new URL(url);
+    const { pathname, searchParams } = urlObj;
+    if (searchParams.has("selectedIssue"))
+      return searchParams.get("selectedIssue");
 
-  const pathArr = pathname.split("/");
-  return pathArr[pathArr.length - 1];
+    const pathArr = pathname.split("/");
+    return pathArr[pathArr.length - 1];
+  } catch (e) {
+    return false;
+  }
 };
 
 // tools to fetch JIRA Details from JIRA API
@@ -63,7 +58,6 @@ const fetchIssueDetailsFromJira = ({ email, token, org, key }) => {
 };
 
 module.exports = {
-  isValidUrl,
   getJiraIssueKeyFromUrl,
   fetchIssueDetailsFromJira,
 };

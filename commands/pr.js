@@ -1,33 +1,50 @@
 #!/usr/bin/env node
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
-const { branchify } = require("../utils/tools");
 const { getEnvVariables } = require("../utils/auth");
 const {
-  isValidUrl,
+  branchify,
+  isEmpty,
+  onCleanBranch,
+  checkoutNewBranch,
+  createPr,
+  pullDefault,
+} = require("../utils/tools");
+const {
   getJiraIssueKeyFromUrl,
   fetchIssueDetailsFromJira,
 } = require("../utils/http");
 
 const pr = async (jiraUrl) => {
-  if (!isValidUrl(jiraUrl)) {
-    console.log("Invalid Jira URL");
-    return;
-  }
-  const environmentVariables = getEnvVariables(); // get auth information from .zshrc or bash profile
-  if (!environmentVariables) return;
-  const data = await fetchIssueDetailsFromJira({
-    ...environmentVariables,
-    key: getJiraIssueKeyFromUrl(jiraUrl),
-  });
-  const {
-    fields: { summary },
-    key,
-  } = data;
+  try {
+    const environmentVariables = getEnvVariables();
+    const jiraKey = getJiraIssueKeyFromUrl(jiraUrl);
+    if (!environmentVariables || !jiraKey) return;
 
-  const branchName = branchify(key, summary);
-  console.log(branchName);
-  console.log(branchName.length);
+    const issueDetails = await fetchIssueDetailsFromJira({
+      ...environmentVariables,
+      key: jiraKey,
+    });
+
+    if (!issueDetails || isEmpty(issueDetails)) {
+      console.log(
+        "Something went wrong when fetching Issue Details from JIRA."
+      );
+      return;
+    }
+
+    const { fields: { summary = "" } = {}, key = "" } = issueDetails; // get relevant fields
+    const branchName = branchify(key, summary);
+
+    const onClean = await onCleanBranch();
+    if (!onClean) return;
+
+    await pullDefault();
+    await checkoutNewBranch(branchName);
+    const pullRequestUrl = await createPr(key, summary, jiraUrl, branchName);
+  } catch (e) {
+    console.log("something went wrong", e);
+  }
 };
 
 module.exports = pr;
