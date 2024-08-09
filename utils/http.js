@@ -12,6 +12,13 @@ const getJiraIssueKeyFromUrl = (url) => {
     const pathArr = pathname.split("/");
     return pathArr[pathArr.length - 1];
   } catch (e) {
+    console.log("Invalid Jira Issue URL.")
+    console.log(" ");
+    console.log("it should look something like this: ")
+    console.log("https://yourorg.atlassian.net/browse/SOME-KEY-123")
+    console.log(" ");
+    console.log("or this: ")
+    console.log("https://yourorg.atlassian.net/jira/some/path/to/a/board/1?selectedIssue=SOME-KEY-123");
     return false;
   }
 };

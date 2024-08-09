@@ -46,6 +46,7 @@ const onCleanBranch = async () => {
     console.log(
       "You must be on 'main' or 'master' branch and have no outstanding changes to begin."
     );
+    console.log(" ");
     console.log(
       "git checkout main/master and ensure working tree is clean before retrying."
     );

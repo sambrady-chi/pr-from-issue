@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/sambrady-chi/pr-from-issue#readme",
   "dependencies": {
-    "commander": "^11.1.0"
+    "commander": "^5.1.0"
   }
 }

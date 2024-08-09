@@ -11,6 +11,7 @@ const getEnvVariables = () => {
     console.log("You do not have your Jira Email configured. ");
     console.log("add the following to your .zshrc file: ");
     console.log('export JIRA_EMAIL="name@email.com"');
+    console.log(" ");
   }
 
   if (!token) {
@@ -20,6 +21,7 @@ const getEnvVariables = () => {
     );
     console.log("Save the token and add it to your .zshrc file like so:");
     console.log('export JIRA_API_TOKEN="<your_token_goes_here>"');
+    console.log(" ");
   }
 
   if (!org) {
@@ -30,6 +32,7 @@ const getEnvVariables = () => {
     console.log("eg. 'https://yourorg.atlassian.net'");
     console.log("add the following to your .zshrc file: ");
     console.log('export JIRA_ORG="yourorg"');
+    console.log(" ");
   }
 
   if (email && token && org) {
