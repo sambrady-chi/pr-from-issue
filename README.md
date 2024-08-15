@@ -14,7 +14,7 @@ export JIRA_EMAIL="yourname@mail.com" // this is the email you use to log into J
 export JIRA_API_TOKEN="string" // generate one here: https://id.atlassian.com/manage-profile/security/api-tokens
 ```
 
-3. This tool assumes you have Git and [GitHub Cli](https://github.com/cli/cli) installed and working on your machine. Ensure that you can successfully run commands like `git checkout -b my-new-branch` and `gh list` before attempting to use this tool.
+3. This tool assumes you have Git and [GitHub Cli](https://github.com/cli/cli) installed and working on your machine. Ensure that you can successfully run commands like `git checkout -b my-new-branch` and `gh list` before attempting to use this tool. Install GitHub CLI with Homebrew by running `brew install gh`.
 
 ### Usage:
 
