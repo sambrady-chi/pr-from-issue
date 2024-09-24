@@ -7,7 +7,7 @@ const branchify = (key, summary) => {
 
   return `${lowerKey}-${lowerSummary}`
     .replace(/[^a-z0-9-]/g, "") // removes anything that is not alphanumeric or a hyphen
-    .slice(0, 50) // max length 50 characters for branch
+    .slice(0, 30) // max length 30 characters for branch
     .trim(); // remove whitespace
 };
 
