@@ -1,7 +1,7 @@
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 
-const branchify = (key, summary) => {
+const branchify = (key, summary = "") => {
   const lowerKey = String(key).toLowerCase().split(" ").join("-");
   const lowerSummary = String(summary).toLowerCase().split(" ").join("-");
 

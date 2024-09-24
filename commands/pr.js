@@ -37,7 +37,7 @@ const pr = async (jiraUrl, newBranchName) => {
 
     //passing the optional branch name if it exists.
     const branchName = newBranchName
-      ? newBranchName.slice(0, 30) // Trim newBranchName if it exceeds 30 characters
+      ? branchify(newBranchName)
       : branchify(key, summary);
 
     const onClean = await onCleanBranch();
