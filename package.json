@@ -1,6 +1,6 @@
 {
   "name": "pr-from-issue",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Lightweight Command Line tool to create a Git Branch and Pull Request from a given JIRA Issue",
   "main": "index.js",
   "bin": {
