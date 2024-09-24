@@ -15,7 +15,7 @@ const {
   fetchIssueDetailsFromJira,
 } = require("../utils/http");
 
-const pr = async (jiraUrl) => {
+const pr = async (jiraUrl, newBranchName) => {
   try {
     const environmentVariables = getEnvVariables();
     const jiraKey = getJiraIssueKeyFromUrl(jiraUrl);
@@ -34,7 +34,11 @@ const pr = async (jiraUrl) => {
     }
 
     const { fields: { summary = "" } = {}, key = "" } = issueDetails; // get relevant fields
-    const branchName = branchify(key, summary);
+
+    //passing the optional branch name if it exists.
+    const branchName = newBranchName
+      ? branchify(newBranchName)
+      : branchify(key, summary);
 
     const onClean = await onCleanBranch();
     if (!onClean) return;
